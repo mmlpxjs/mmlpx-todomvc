@@ -2,4 +2,12 @@ node_modules
 npm-debug.log
 .DS_Store
 dist
-.idea/
+.idea/vcs.xml
+.idea
+.idea/codeStyles/
+.idea/inspectionProfiles/
+.idea/jsLibraryMappings.xml
+.idea/misc.xml
+.idea/mmlpx-todomvc.iml
+.idea/modules.xml
+.idea/workspace.xml
