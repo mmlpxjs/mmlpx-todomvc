@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/mmlpxjs/mmlpx-todomvc#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.110",
     "@types/react": "^16.4.2",
     "@types/react-dom": "^16.0.6",
     "autoprefixer": "^7.2.4",
@@ -53,7 +54,9 @@
     "webpack-merge": "^4.1.1"
   },
   "dependencies": {
-    "mmlpx": "^3.1.0",
+    "lodash": "^4.17.10",
+    "lodash-decorators": "^6.0.0",
+    "mmlpx": "^3.1.1",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "react": "^16.4.1",
