@@ -4,10 +4,11 @@
  * @since 2018-06-27 23:07
  */
 
-import { inject, ViewModel } from 'mmlpx';
-import { action, computed, observable } from 'mobx';
-import { Todo } from '../../models/Todo';
-import TodosStore from '../../stores/TodosStore';
+import { applySnapshot, getSnapshot, inject, onSnapshot, Snapshot, ViewModel } from 'mmlpx';
+import { action, computed, observable, runInAction } from 'mobx';
+import TodosLoder from '../../mmlpx/loders/TodosLoder';
+import { Todo } from '../../mmlpx/models/Todo';
+import TodosStore from '../../mmlpx/stores/TodosStore';
 
 type Filter = 'all' | 'active' | 'completed';
 
@@ -18,6 +19,12 @@ export default class TodoAppViewModel {
 	private readonly todosStore: TodosStore;
 
 	@observable
+	private stack: Snapshot[] = [];
+
+	@observable
+	private cursor = 0;
+
+	@observable
 	inputtingTodo = '';
 
 	@observable
@@ -25,6 +32,16 @@ export default class TodoAppViewModel {
 
 	@observable
 	filter: Filter = 'all';
+
+	@computed
+	get canRedo() {
+		return this.stack.length > 1 && 0 <= this.cursor && this.cursor < this.stack.length - 1;
+	}
+
+	@computed
+	get canUndo() {
+		return this.stack.length > 1 && 0 < this.cursor && this.cursor < this.stack.length;
+	}
 
 	@computed
 	get allCompleted(): boolean {
@@ -97,8 +114,32 @@ export default class TodoAppViewModel {
 	clearCompleted() {
 		const todos = [...this.todosStore.list];
 		todos.forEach(todo => {
-			if (todo.completed) this.todosStore.removeTodo(todo);
+			if (todo.completed) {
+				this.todosStore.removeTodo(todo);
+			}
 		});
+	}
+
+	@action.bound
+	enableRedoUndo() {
+		this.stack.push(getSnapshot());
+		onSnapshot(snapshot => {
+			runInAction(() => {
+				this.stack.push(snapshot);
+				this.cursor = this.stack.length - 1;
+				TodosLoder.saveSnapshot(snapshot);
+			});
+		});
+	}
+
+	@action.bound
+	redo() {
+		applySnapshot(this.stack[++this.cursor]);
+	}
+
+	@action.bound
+	undo() {
+		applySnapshot(this.stack[--this.cursor]);
 	}
 
 }

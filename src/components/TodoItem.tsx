@@ -6,7 +6,7 @@
 
 import { bind } from 'lodash-decorators';
 import React, { KeyboardEvent } from 'react';
-import { Todo } from '../models/Todo';
+import { Todo } from '../mmlpx/models/Todo';
 
 interface Props {
 	todo: Todo;

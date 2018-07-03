@@ -25,6 +25,17 @@
     "url": "https://github.com/mmlpxjs/mmlpx-todomvc/issues"
   },
   "homepage": "https://github.com/mmlpxjs/mmlpx-todomvc#readme",
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "lodash-decorators": "^6.0.0",
+    "mmlpx": "^3.1.1",
+    "mobx": "^4.3.1",
+    "mobx-react": "^5.2.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "todomvc-app-css": "^2.0.1",
+    "todomvc-common": "^1.0.2"
+  },
   "devDependencies": {
     "@types/lodash": "^4.14.110",
     "@types/react": "^16.4.2",
@@ -42,7 +53,7 @@
     "husky": "^0.14.1",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.19.1",
-    "ts-plugin-mmlpx": "0.0.2",
+    "ts-plugin-mmlpx": "0.0.3",
     "tslint": "^5.10.0",
     "tslint-eslint-rules": "^5.3.1",
     "typescript": "^2.9.2",
@@ -52,16 +63,5 @@
     "webpack-bundle-analyzer": "^2.11.1",
     "webpack-dev-server": "^2.9.7",
     "webpack-merge": "^4.1.1"
-  },
-  "dependencies": {
-    "lodash": "^4.17.10",
-    "lodash-decorators": "^6.0.0",
-    "mmlpx": "^3.1.1",
-    "mobx": "^5.0.3",
-    "mobx-react": "^5.2.3",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "todomvc-app-css": "^2.0.1",
-    "todomvc-common": "^1.0.2"
   }
 }
