@@ -1,20 +1,22 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const { baseWebpackConfig, styleLoader } = require('./webpack.base');
+const { baseWebpackConfig } = require('./webpack.base');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const config = require('./config');
 
 const env = process.env.NODE_ENV;
 const publicPath = config.prod.publicPath;
+const buildOutputDir = config.prod.buildOutputPath;
 
 const webpackConfig = merge(baseWebpackConfig, {
 	entry: {
-		'ccms-diagram': './src/containers/index.ts',
+		'app': './src/index.tsx',
 	},
 	devtool: '#source-map',
 	stats: {
@@ -24,12 +26,9 @@ const webpackConfig = merge(baseWebpackConfig, {
 		children: true,
 	},
 	output: {
-		library: '[name]',
-		libraryTarget: 'umd',
-		filename: '[name].js',
-	},
-	externals: {
-		angular: 'angular',
+		path: buildOutputDir,
+		filename: '[name]-[chunkhash:8].min.js',
+		publicPath,
 	},
 	module: {
 		rules: [
@@ -47,15 +46,15 @@ const webpackConfig = merge(baseWebpackConfig, {
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify(env)
 		}),
-		// new UglifyJsPlugin({
-		// 	uglifyOptions: {
-		// 		compress: {
-		// 			warnings: false
-		// 		}
-		// 	},
-		// 	sourceMap: true,
-		// 	parallel: true
-		// }),
+		new UglifyJsPlugin({
+			uglifyOptions: {
+				compress: {
+					warnings: false
+				}
+			},
+			sourceMap: true,
+			parallel: true
+		}),
 		// extract css into its own file
 		new ExtractTextPlugin({
 			filename: '[name].css',
@@ -70,23 +69,25 @@ const webpackConfig = merge(baseWebpackConfig, {
 		new OptimizeCSSPlugin({
 			cssProcessorOptions: { safe: true, map: { inline: false } }
 		}),
+		new HtmlWebpackInlineSourcePlugin(),
 		// generate dist index.html with correct asset hash for caching.
 		// you can customize output by editing /index.html
 		// see https://github.com/ampedandwired/html-webpack-plugin
-		// new HtmlWebpackPlugin({
-		// 	filename: path.join(config.prod.buildOutputPath, './index.html'),
-		// 	template: './src/index.html',
-		// 	inject: true,
-		// 	minify: {
-		// 		removeComments: true,
-		// 		collapseWhitespace: true,
-		// 		removeAttributeQuotes: true
-		// 		// more options:
-		// 		// https://github.com/kangax/html-minifier#options-quick-reference
-		// 	},
-		// 	// necessary to consistently work with multiple chunks via CommonsChunkPlugin
-		// 	chunksSortMode: 'dependency'
-		// }),
+		new HtmlWebpackPlugin({
+			filename: './index.html',
+			template: './src/index.html',
+			inlineSource: /manifest-\w+\.min\.js$/,
+			inject: true,
+			minify: {
+				removeComments: true,
+				collapseWhitespace: true,
+				removeAttributeQuotes: true
+				// more options:
+				// https://github.com/kangax/html-minifier#options-quick-reference
+			},
+			// necessary to consistently work with multiple chunks via CommonsChunkPlugin
+			chunksSortMode: 'dependency'
+		}),
 		// keep module.id stable when vendor modules does not change
 		new webpack.HashedModuleIdsPlugin(),
 		// enable scope hoisting

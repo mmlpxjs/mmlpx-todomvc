@@ -7,8 +7,8 @@ module.exports = {
 	},
 
 	prod: {
-		publicPath: '/mmlpx-todomvc/dist',
-		buildOutputPath: path.join(__dirname, '../dist')
+		publicPath: '/mmlpx-todomvc',
+		buildOutputPath: path.join(__dirname, '../docs')
 	}
 
 };

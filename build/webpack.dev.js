@@ -1,12 +1,8 @@
-/**
- * @author  fang.yang
- * @date on 2018.01.09
- */
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
-const { baseWebpackConfig, styleLoader } = require('./webpack.base');
+const { baseWebpackConfig } = require('./webpack.base');
 const config = require('./config');
 
 const srcCodeDir = path.join(__dirname, '../src');
@@ -53,8 +49,8 @@ module.exports = merge(baseWebpackConfig, {
 		new webpack.NoEmitOnErrorsPlugin(),
 		// https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
-			filename: 'index.html',
-			template: './index.html',
+			filename: './index.html',
+			template: './src/index.html',
 			inject: true
 		}),
 	]
