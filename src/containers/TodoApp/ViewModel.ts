@@ -4,7 +4,7 @@
  * @since 2018-06-27 23:07
  */
 
-import { applySnapshot, getSnapshot, inject, onSnapshot, Snapshot, ViewModel } from 'mmlpx';
+import { applySnapshot, getSnapshot, inject, onSnapshot, ViewModel } from 'mmlpx';
 import { action, computed, observable, runInAction } from 'mobx';
 import TodosLoder from '../../mmlpx/loders/TodosLoder';
 import { Todo } from '../../mmlpx/models/Todo';
@@ -19,7 +19,7 @@ export default class TodoAppViewModel {
 	private readonly todosStore: TodosStore;
 
 	@observable
-	private stack: Snapshot[] = [];
+	private stack: any[] = [];
 
 	@observable
 	private cursor = 0;
@@ -123,7 +123,7 @@ export default class TodoAppViewModel {
 	@action.bound
 	enableRedoUndo() {
 		this.stack.push(getSnapshot());
-		onSnapshot(snapshot => {
+		return onSnapshot(snapshot => {
 			runInAction(() => {
 				this.stack.push(snapshot);
 				this.cursor = this.stack.length - 1;

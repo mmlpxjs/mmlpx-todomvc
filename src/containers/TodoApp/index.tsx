@@ -6,6 +6,7 @@
 
 import { bind } from 'lodash-decorators';
 import { inject } from 'mmlpx';
+import { IReactionDisposer } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { KeyboardEvent, SFC } from 'react';
 import TodoItem from '../../components/TodoItem';
@@ -30,8 +31,14 @@ export default class Index extends React.Component {
 	@inject()
 	viewModel: TodoAppViewModel;
 
+	disposer: IReactionDisposer;
+
 	componentDidMount() {
-		this.viewModel.enableRedoUndo();
+		this.disposer = this.viewModel.enableRedoUndo();
+	}
+
+	componentWillUnmount() {
+		this.disposer();
 	}
 
 	@bind()
